@@ -1,0 +1,20 @@
+{
+  "name": "lychee",
+  "version": "1.0.0",
+  "description": "A calendar and habit tracking application",
+  "homepage": "https://github.com/lilacdotdev/Lychee#readme",
+  "bugs": {
+    "url": "https://github.com/lilacdotdev/Lychee/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lilacdotdev/Lychee.git"
+  },
+  "license": "ISC",
+  "author": "LilacDotDev",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "dev"
+  }
+}
