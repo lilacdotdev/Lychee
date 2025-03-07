@@ -5,14 +5,14 @@
   "identifier": "lychee.lilaccs.dev",
   "build": {
     "beforeDevCommand": "npm run dev",
-    "devUrl": "http://localhost:1420",
+    "devUrl": "http://localhost:8080",
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist"
   },
   "app": {
     "windows": [
       {
-        "title": "lychee",
+        "title": "Lychee",
         "width": 800,
         "height": 600
       }
