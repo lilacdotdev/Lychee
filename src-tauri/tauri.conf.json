@@ -1,11 +1,11 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "lychee",
+  "productName": "Lychee",
   "version": "0.1.0",
   "identifier": "lychee.lilaccs.dev",
   "build": {
     "beforeDevCommand": "npm run dev",
-    "devUrl": "http://localhost:8080",
+    "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist"
   },
@@ -13,7 +13,7 @@
     "windows": [
       {
         "title": "Lychee",
-        "width": 800,
+        "width": 1000,
         "height": 600
       }
     ],
