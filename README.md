@@ -23,6 +23,7 @@ This application was inspired by my messy notes. I have a scratch notebook where
 **Back-End** ⤵
 - Tauri
 - Rust
+- SQLite
 
 ## Installation 📥
 
