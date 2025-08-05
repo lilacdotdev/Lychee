@@ -1,0 +1,39 @@
+/* src/styles/themes/monokai.css */
+:root {
+  --color-primary: #a6e22e;
+  --color-success: #a6e22e;
+  --color-danger: #f92672;
+  --color-text-secondary: #75715e;
+  --color-background-primary: #272822;
+  --color-background-secondary: #3e3d32;
+  --color-text-primary: #f8f8f2;
+  --color-border: #49483e;
+}
+
+/* Monokai syntax highlighting colors */
+.markdown-preview h1, .markdown-content h1 {
+  color: #f92672;
+}
+
+.markdown-preview h2, .markdown-content h2 {
+  color: #fd971f;
+}
+
+.markdown-preview h3, .markdown-content h3 {
+  color: #e6db74;
+}
+
+.markdown-preview code, .markdown-content code {
+  background-color: #3e3d32;
+  color: #66d9ef;
+}
+
+.markdown-preview pre, .markdown-content pre {
+  background-color: #3e3d32;
+  border: 1px solid #49483e;
+}
+
+.markdown-preview blockquote, .markdown-content blockquote {
+  border-left-color: #a6e22e;
+  color: #75715e;
+}

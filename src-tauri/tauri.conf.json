@@ -30,5 +30,10 @@
       "icons/lychee.icns",
       "icons/lychee.ico"
     ]
+  },
+  "plugins": {
+    "sql": {
+      "preload": ["sqlite:notes.db"]
+    }
   }
 }

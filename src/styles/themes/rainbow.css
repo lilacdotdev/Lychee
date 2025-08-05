@@ -1,0 +1,33 @@
+/* src/styles/themes/rainbow.css */
+:root {
+  --color-primary: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7);
+  --color-primary-solid: #ff6b6b;
+  --color-success: #00b894;
+  --color-danger: #e84393;
+  --color-text-secondary: #636e72;
+  --color-background-primary: #2d3436;
+  --color-background-secondary: #636e72;
+  --color-text-primary: #ddd;
+  --color-border: #74b9ff;
+}
+
+/* Special gradient button styling for rainbow theme */
+button {
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1) !important;
+  background-size: 200% 200% !important;
+  animation: rainbow-gradient 3s ease infinite !important;
+}
+
+@keyframes rainbow-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.tag-btn.selected,
+.tag-chip,
+.tag-badge,
+.tag-item {
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4) !important;
+  animation: rainbow-gradient 3s ease infinite !important;
+}

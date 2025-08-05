@@ -12,13 +12,22 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@tauri-apps/api": "^2",
+    "@tauri-apps/api": "^2.7.0",
     "@tauri-apps/plugin-opener": "^2",
     "@tauri-apps/plugin-sql": "^2.3.0",
+    "@types/katex": "^0.16.7",
+    "dompurify": "^3.2.6",
+    "highlight.js": "^11.11.1",
+    "katex": "^0.16.22",
+    "marked": "^16.1.2",
+    "marked-highlight": "^2.2.2",
+    "marked-katex": "^0.3.8",
     "solid-js": "^1.9.3"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",
+    "@types/dompurify": "^3.0.5",
+    "@types/marked": "^5.0.2",
     "typescript": "~5.6.2",
     "vite": "^6.0.3",
     "vite-plugin-solid": "^2.11.0"
