@@ -2,6 +2,7 @@
 
 import { createSignal, createEffect, For, Show, onMount } from "solid-js";
 import { themeManager, type Theme } from "../lib/theme";
+import { Icon } from "./Icon";
 
 export function ThemeSelector() {
   const [currentTheme, setCurrentTheme] = createSignal(themeManager.getCurrentTheme());
@@ -71,7 +72,7 @@ export function ThemeSelector() {
         class="theme-selector-button"
         title={`Change theme (Current: ${currentThemeDisplayName()})`}
       >
-        <span class="theme-icon">🎨</span>
+        <Icon name="droplet" size={20} class="clickable" />
       </button>
 
       <Show when={isOpen()}>
@@ -84,7 +85,7 @@ export function ThemeSelector() {
                 class="theme-action-btn"
                 title="Open themes folder"
               >
-                📁
+                <Icon name="folder" size={16} class="clickable" />
               </button>
             </div>
           </div>

@@ -3,6 +3,7 @@
 import { createSignal, createResource, For, Show } from "solid-js";
 import { invoke } from "@tauri-apps/api/core";
 import { ThemeSelector } from "./ThemeSelector";
+import { Icon } from "./Icon";
 import type { Tag } from "../types";
 
 interface SidebarProps {
@@ -97,7 +98,7 @@ export function Sidebar(props: SidebarProps) {
           onClick={handlePluginsClick}
           title="Plugins"
         >
-          🔌
+          <Icon name="package" size={20} class="clickable" />
         </button>
         
         <div class="theme-selector-wrapper">
@@ -109,7 +110,7 @@ export function Sidebar(props: SidebarProps) {
           onClick={handleSettingsClick}
           title="Settings"
         >
-          ⚙️
+          <Icon name="settings" size={20} class="clickable" />
         </button>
       </div>
     </aside>

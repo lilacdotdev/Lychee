@@ -1,5 +1,211 @@
   /* src/styles/style.css */
 
+/* Icon styles */
+.icon {
+  color: var(--color-text-primary);
+  fill: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.icon:hover {
+  color: var(--color-primary);
+}
+
+/* Ensure all SVG children inherit the color */
+.icon *,
+.icon path,
+.icon line,
+.icon circle,
+.icon rect,
+.icon polyline,
+.icon polygon {
+  stroke: currentColor !important;
+  fill: none !important;
+}
+
+.icon.clickable {
+  cursor: pointer;
+}
+
+.icon.clickable:hover {
+  transform: scale(1.05);
+}
+
+/* Specific icon button styles */
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.icon-button:hover {
+  background-color: var(--color-background-secondary);
+}
+
+.icon-button .icon {
+  color: var(--color-text-primary);
+}
+
+.icon-button:hover .icon {
+  color: var(--color-primary);
+}
+
+/* Button with icon and text */
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  transition: background-color 0.2s ease;
+}
+
+.back-btn:hover {
+  background-color: var(--color-background-secondary);
+}
+
+.back-btn .icon {
+  color: var(--color-text-primary);
+}
+
+.back-btn:hover .icon {
+  color: var(--color-primary);
+}
+
+/* Note action buttons */
+.note-action-btn, .edit-btn, .delete-btn, .save-btn, .cancel-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.note-action-btn:hover, .edit-btn:hover, .delete-btn:hover, 
+.save-btn:hover, .cancel-btn:hover {
+  background-color: var(--color-background-secondary);
+}
+
+.note-action-btn .icon, .edit-btn .icon, .delete-btn .icon, 
+.save-btn .icon, .cancel-btn .icon {
+  color: var(--color-text-primary);
+}
+
+.note-action-btn:hover .icon, .edit-btn:hover .icon, .delete-btn:hover .icon, 
+.save-btn:hover .icon, .cancel-btn:hover .icon {
+  color: var(--color-primary);
+}
+
+/* Sidebar icon buttons */
+.sidebar-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-icon-btn:hover {
+  background-color: var(--color-background-secondary);
+}
+
+.sidebar-icon-btn .icon {
+  color: var(--color-text-primary);
+}
+
+.sidebar-icon-btn:hover .icon {
+  color: var(--color-primary);
+}
+
+/* Force sidebar icons to inherit color */
+.sidebar-icon-btn .icon *,
+.sidebar-icon-btn .icon path,
+.sidebar-icon-btn .icon line,
+.sidebar-icon-btn .icon circle,
+.sidebar-icon-btn .icon rect {
+  stroke: currentColor !important;
+  fill: none !important;
+}
+
+/* Theme selector button */
+.theme-selector-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.theme-selector-button:hover {
+  background-color: var(--color-background-secondary);
+}
+
+.theme-selector-button .icon {
+  color: var(--color-text-primary);
+}
+
+.theme-selector-button:hover .icon {
+  color: var(--color-primary);
+}
+
+/* Force theme selector icon to inherit color */
+.theme-selector-button .icon *,
+.theme-selector-button .icon path,
+.theme-selector-button .icon line,
+.theme-selector-button .icon circle,
+.theme-selector-button .icon rect {
+  stroke: currentColor !important;
+  fill: none !important;
+}
+
+/* Clear search button */
+.clear-search-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.clear-search-btn:hover {
+  background-color: var(--color-background-secondary);
+}
+
+.clear-search-btn .icon {
+  color: var(--color-text-primary);
+}
+
+.clear-search-btn:hover .icon {
+  color: var(--color-primary);
+}
+
 /* Define base properties for the whole app */
 body {
   margin: 0;

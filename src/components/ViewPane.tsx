@@ -4,7 +4,8 @@ import { createSignal, Show, For, createEffect, createMemo } from "solid-js";
 import { invoke } from "@tauri-apps/api/core";
 import { parseMarkdown, extractPlainText } from "../lib/markdown";
 import { parseAndFormatTags } from "../lib/tagFormatter";
-import type { NoteWithTags, CreateNoteRequest, UpdateNoteRequest } from "../types";
+import { Icon } from "./Icon";
+import type { NoteWithTags, UpdateNoteRequest } from "../types";
 
 interface ViewPaneProps {
   notes: NoteWithTags[];
@@ -19,7 +20,6 @@ interface ViewPaneProps {
 
 export function ViewPane(props: ViewPaneProps) {
   const [editContent, setEditContent] = createSignal('');
-  const [editTags, setEditTags] = createSignal('');
   const [tagInput, setTagInput] = createSignal('');
   const [editTagList, setEditTagList] = createSignal<string[]>([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = createSignal(false);
@@ -35,9 +35,8 @@ export function ViewPane(props: ViewPaneProps) {
     if (viewMode === 'edit' && selectedId) {
       const note = notes.find(n => n.id === selectedId);
       if (note) {
-        setEditContent(note.content);
-        setEditTags(note.tags.join(', '));
-        setEditTagList(note.tags);
+              setEditContent(note.content);
+      setEditTagList(note.tags);
         setTagInput('');
       }
     }
@@ -107,7 +106,8 @@ export function ViewPane(props: ViewPaneProps) {
     const note = currentNote();
     if (note) {
       setEditContent(note.content);
-      setEditTags(note.tags.join(', '));
+      setEditTagList(note.tags);
+      setTagInput('');
       props.onViewModeChange('edit');
     }
   };
@@ -244,8 +244,9 @@ export function ViewPane(props: ViewPaneProps) {
                           handleNoteClick(note.id);
                           setTimeout(() => handleEditNote(), 0);
                         }}
+                        title="Edit note"
                       >
-                        ✏️
+                        <Icon name="edit" size={16} class="clickable" />
                       </button>
                       <button 
                         class="note-action-btn delete-btn"
@@ -254,8 +255,9 @@ export function ViewPane(props: ViewPaneProps) {
                           props.onSelectedNoteIdChange(note.id);
                           setTimeout(() => handleDeleteNote(), 0);
                         }}
+                        title="Delete note"
                       >
-                        🗑️
+                        <Icon name="trash-2" size={16} class="clickable" />
                       </button>
                     </div>
                   </div>
@@ -269,15 +271,16 @@ export function ViewPane(props: ViewPaneProps) {
       <Show when={props.viewMode === 'note'}>
         <div class="note-view">
           <div class="note-toolbar">
-            <button class="back-btn" onClick={handleBackToSearch}>
-              ← Back
+            <button class="back-btn" onClick={handleBackToSearch} title="Back to search">
+              <Icon name="arrow-left" size={18} class="clickable" />
+              <span>Back</span>
             </button>
             <div class="note-actions">
-              <button class="edit-btn" onClick={handleEditNote}>
-                ✏️
+              <button class="edit-btn" onClick={handleEditNote} title="Edit note">
+                <Icon name="edit" size={18} class="clickable" />
               </button>
-              <button class="delete-btn" onClick={handleDeleteNote}>
-                🗑️
+              <button class="delete-btn" onClick={handleDeleteNote} title="Delete note">
+                <Icon name="trash-2" size={18} class="clickable" />
               </button>
             </div>
           </div>
@@ -324,15 +327,15 @@ export function ViewPane(props: ViewPaneProps) {
       <Show when={props.viewMode === 'edit'}>
         <div class="edit-view">
           <div class="edit-toolbar">
-            <button class="back-btn" onClick={handleBackFromEdit}>
-              ←
+            <button class="back-btn" onClick={handleBackFromEdit} title="Back">
+              <Icon name="arrow-left" size={18} class="clickable" />
             </button>
             <div class="edit-actions">
               <button class="save-btn" onClick={handleSaveNote} title="Save">
-                💾
+                <Icon name="save" size={18} class="clickable" />
               </button>
               <button class="cancel-btn" onClick={handleCancelEdit} title="Cancel">
-                ✕
+                <Icon name="x" size={18} class="clickable" />
               </button>
             </div>
           </div>

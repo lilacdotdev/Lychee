@@ -3,6 +3,7 @@
 import { createSignal, createResource, For, Show } from "solid-js";
 import { invoke } from "@tauri-apps/api/core";
 import { parseAndFormatTags } from "../lib/tagFormatter";
+import { Icon } from "./Icon";
 import type { NoteWithTags } from "../types";
 
 interface HeaderProps {
@@ -97,8 +98,8 @@ export function Header(props: HeaderProps) {
             class="search-input"
           />
           {(props.searchQuery || props.selectedTags.length > 0) && (
-            <button onClick={clearSearch} class="clear-search-btn">
-              ✕
+            <button onClick={clearSearch} class="clear-search-btn" title="Clear search">
+              <Icon name="x" size={16} class="clickable" />
             </button>
           )}
         </div>
