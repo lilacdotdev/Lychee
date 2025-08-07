@@ -61,7 +61,7 @@ export function Header(props: HeaderProps) {
   };
 
   const handleExport = () => {
-    console.log("Export functionality will be implemented later");
+    // Export functionality to be implemented
     setShowLogoMenu(false);
   };
 

@@ -14,19 +14,14 @@ export function NoteList(props: NoteListProps) {
   const [isCreating, setIsCreating] = createSignal(false);
 
   const handleCreateNote = async () => {
-    console.log("Creating new note from sidebar...");
     setIsCreating(true);
     try {
       const createRequest = {
         content: "# New Note\n\nStart writing your note here...",
         tags: []
       };
-      console.log("Creating note with request:", createRequest);
-      
-
       
       const newNoteId = await invoke<number>("create_note", { request: createRequest });
-      console.log("New note created with ID:", newNoteId);
       props.onNotesChange();
       // Select the newly created note
       props.setSelectedNoteId(newNoteId);

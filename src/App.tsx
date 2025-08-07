@@ -37,7 +37,6 @@ function App() {
   // Initialize theme manager and load notes
   createEffect(() => {
     // Ensure theme manager is initialized
-    console.log("Initializing theme manager...");
     themeManager.applyTheme(themeManager.getCurrentTheme());
     
     // Load notes

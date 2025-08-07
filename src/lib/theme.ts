@@ -216,7 +216,7 @@ class ThemeManager {
           detail: { theme: themeName } 
         }));
         
-        console.log(`User theme ${themeName} applied successfully`);
+
         return;
       }
     }
@@ -235,8 +235,7 @@ class ThemeManager {
       return;
     }
 
-    console.log(`Applying theme: ${themeName}`);
-    console.log(`CSS to apply:`, css.substring(0, 200) + '...');
+
 
     // Apply the CSS
     this.themeElement.textContent = css;
@@ -247,20 +246,14 @@ class ThemeManager {
     this.currentTheme = themeName;
     localStorage.setItem('lychee-theme', themeName);
     
-    // Verify the CSS variables are actually set
-    setTimeout(() => {
-      const computedStyles = getComputedStyle(document.documentElement);
-      const primary = computedStyles.getPropertyValue('--color-primary').trim();
-      const background = computedStyles.getPropertyValue('--color-background-primary').trim();
-      console.log(`Theme applied - Primary: ${primary}, Background: ${background}`);
-    }, 100);
+
     
     // Dispatch custom event for theme change
     window.dispatchEvent(new CustomEvent('theme-changed', { 
       detail: { theme: themeName } 
     }));
 
-    console.log(`Theme ${themeName} applied successfully`);
+
   }
 
   async refreshUserThemes() {
@@ -273,7 +266,6 @@ class ThemeManager {
     try {
       await invoke('open_themes_directory');
       const themesPath = await invoke<string>('get_themes_directory');
-      console.log(`Themes folder: ${themesPath}`);
       return themesPath;
     } catch (error) {
       console.error('Failed to open themes folder:', error);

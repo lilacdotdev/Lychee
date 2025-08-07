@@ -61,11 +61,11 @@ export function Sidebar(props: SidebarProps) {
   };
 
   const handlePluginsClick = () => {
-    console.log("Plugins functionality will be implemented later");
+    // Plugins functionality to be implemented
   };
 
   const handleSettingsClick = () => {
-    console.log("Settings functionality will be implemented later");
+    // Settings functionality to be implemented
   };
 
   return (
