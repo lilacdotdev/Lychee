@@ -282,6 +282,26 @@ export function ViewPane(props: ViewPaneProps) {
             </div>
           </div>
           
+          <div class="note-tags-section">
+            <Show when={currentNote()}>
+              {(() => {
+                const note = currentNote();
+                if (!note || !note.tags || note.tags.length === 0) {
+                  return null;
+                }
+                return (
+                  <div class="note-tags">
+                    <For each={note.tags}>
+                      {(tag) => (
+                        <span class="note-tag-badge">{tag}</span>
+                      )}
+                    </For>
+                  </div>
+                );
+              })()}
+            </Show>
+          </div>
+          
           <div class="note-content">
             <Show when={currentNote()}>
               {(() => {
@@ -363,16 +383,16 @@ export function ViewPane(props: ViewPaneProps) {
             <p>Are you sure you want to delete this note? This action cannot be undone.</p>
             <div class="modal-actions">
               <button 
-                class="modal-btn no-btn" 
-                onClick={() => setShowDeleteConfirm(false)}
-              >
-                No
-              </button>
-              <button 
                 class="modal-btn yes-btn" 
                 onClick={confirmDeleteNote}
               >
                 Yes
+              </button>
+              <button 
+                class="modal-btn no-btn" 
+                onClick={() => setShowDeleteConfirm(false)}
+              >
+                No
               </button>
             </div>
           </div>
@@ -386,16 +406,16 @@ export function ViewPane(props: ViewPaneProps) {
             <p>Do you want to discard all changes?</p>
             <div class="modal-actions">
               <button 
-                class="modal-btn no-btn" 
-                onClick={() => setShowCancelConfirm(false)}
-              >
-                No
-              </button>
-              <button 
                 class="modal-btn yes-btn" 
                 onClick={confirmCancelEdit}
               >
                 Yes
+              </button>
+              <button 
+                class="modal-btn no-btn" 
+                onClick={() => setShowCancelConfirm(false)}
+              >
+                No
               </button>
             </div>
           </div>

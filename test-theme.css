@@ -1,0 +1,23 @@
+/* Test Theme - Bright Purple */
+:root {
+  --color-primary: #9c27b0 !important;
+  --color-background-primary: #f3e5f5 !important;
+  --color-background-secondary: #e1bee7 !important;
+  --color-text-primary: #4a148c !important;
+  --color-border: #ba68c8 !important;
+  --color-success: #4caf50 !important;
+  --color-danger: #f44336 !important;
+  --color-text-secondary: #7b1fa2 !important;
+}
+
+/* Test custom styling */
+.note-card {
+  background: linear-gradient(135deg, #e1bee7 0%, #f3e5f5 100%) !important;
+  border: 2px solid #9c27b0 !important;
+  box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3) !important;
+}
+
+.note-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 20px rgba(156, 39, 176, 0.4) !important;
+}

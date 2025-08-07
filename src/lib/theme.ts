@@ -1,9 +1,19 @@
 // src/lib/theme.ts
+import { invoke } from '@tauri-apps/api/core';
 
 export interface Theme {
   name: string;
   displayName: string;
   cssFile: string;
+  isUserTheme?: boolean;
+  content?: string;
+}
+
+export interface UserTheme {
+  name: string;
+  display_name: string;
+  content: string;
+  file_path: string;
 }
 
 // Define theme CSS content directly in JavaScript
@@ -141,6 +151,8 @@ export const availableThemes: Theme[] = [
 class ThemeManager {
   private currentTheme: string = 'light';
   private themeElement: HTMLStyleElement | null = null;
+  private userThemes: UserTheme[] = [];
+  private allThemes: Theme[] = [...availableThemes];
 
   constructor() {
     this.loadSavedTheme();
@@ -167,7 +179,49 @@ class ThemeManager {
     this.applyTheme(this.currentTheme);
   }
 
-  applyTheme(themeName: string) {
+  async loadAllThemes(): Promise<Theme[]> {
+    try {
+      this.userThemes = await invoke<UserTheme[]>('get_user_themes');
+      
+      // Convert user themes to Theme interface
+      const convertedUserThemes: Theme[] = this.userThemes.map(userTheme => ({
+        name: userTheme.name,
+        displayName: userTheme.display_name,
+        cssFile: '',
+        isUserTheme: true,
+        content: userTheme.content
+      }));
+
+      this.allThemes = [...availableThemes, ...convertedUserThemes];
+      return this.allThemes;
+    } catch (error) {
+      console.error('Failed to load user themes:', error);
+      this.allThemes = [...availableThemes];
+      return this.allThemes;
+    }
+  }
+
+  async applyTheme(themeName: string) {
+    // Check if it's a user theme
+    const userTheme = this.allThemes.find(t => t.name === themeName && t.isUserTheme);
+    if (userTheme && userTheme.content) {
+      // Apply user theme content
+      if (this.themeElement) {
+        this.themeElement.textContent = userTheme.content;
+        this.currentTheme = themeName;
+        localStorage.setItem('lychee-theme', themeName);
+        
+        // Dispatch theme change event
+        window.dispatchEvent(new CustomEvent('theme-changed', { 
+          detail: { theme: themeName } 
+        }));
+        
+        console.log(`User theme ${themeName} applied successfully`);
+        return;
+      }
+    }
+
+    // Fall back to built-in theme logic
     const theme = availableThemes.find(t => t.name === themeName);
     if (!theme || !this.themeElement) {
       console.error(`Theme not found or element missing: ${themeName}`);
@@ -209,12 +263,50 @@ class ThemeManager {
     console.log(`Theme ${themeName} applied successfully`);
   }
 
+  async refreshUserThemes() {
+    await this.loadAllThemes();
+    // Re-populate theme selector
+    window.dispatchEvent(new CustomEvent('themes-refreshed'));
+  }
+
+  async openThemesDirectory(): Promise<string> {
+    try {
+      await invoke('open_themes_directory');
+      const themesPath = await invoke<string>('get_themes_directory');
+      console.log(`Themes folder: ${themesPath}`);
+      return themesPath;
+    } catch (error) {
+      console.error('Failed to open themes folder:', error);
+      throw error;
+    }
+  }
+
+  async saveUserTheme(name: string, content: string): Promise<void> {
+    try {
+      await invoke('save_user_theme', { name, content });
+      await this.refreshUserThemes();
+    } catch (error) {
+      console.error('Failed to save user theme:', error);
+      throw error;
+    }
+  }
+
+  async deleteUserTheme(themeName: string): Promise<void> {
+    try {
+      await invoke('delete_user_theme', { themeName });
+      await this.refreshUserThemes();
+    } catch (error) {
+      console.error('Failed to delete user theme:', error);
+      throw error;
+    }
+  }
+
   getCurrentTheme(): string {
     return this.currentTheme;
   }
 
   getAvailableThemes(): Theme[] {
-    return availableThemes;
+    return this.allThemes;
   }
 }
 

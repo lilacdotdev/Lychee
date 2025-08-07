@@ -1,0 +1,52 @@
+/* Cyberpunk Theme for Lychee */
+:root {
+  --color-primary: #00ff41 !important;
+  --color-background-primary: #0d1117 !important;
+  --color-background-secondary: #161b22 !important;
+  --color-text-primary: #00ff41 !important;
+  --color-border: #ff1744 !important;
+  --color-success: #00ff41 !important;
+  --color-danger: #ff1744 !important;
+  --color-text-secondary: #58a6ff !important;
+}
+
+/* Custom styling */
+.app-header {
+  border-bottom: 2px solid #ff1744 !important;
+  background: linear-gradient(90deg, #0d1117 0%, #161b22 100%) !important;
+}
+
+.note-card {
+  background: linear-gradient(135deg, #161b22 0%, #0d1117 100%) !important;
+  border: 1px solid #ff1744 !important;
+  box-shadow: 0 0 10px rgba(255, 23, 68, 0.3) !important;
+}
+
+.note-card:hover {
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.5) !important;
+  transform: translateY(-2px) !important;
+  transition: all 0.3s ease !important;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, #0d1117 0%, #161b22 100%) !important;
+  border-right: 2px solid #ff1744 !important;
+}
+
+.tag-badge {
+  background: linear-gradient(45deg, #00ff41, #58a6ff) !important;
+  color: #0d1117 !important;
+  border: 1px solid #00ff41 !important;
+  box-shadow: 0 0 5px rgba(0, 255, 65, 0.3) !important;
+}
+
+button:hover {
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.5) !important;
+}
+
+/* Glowing text effect for headers */
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+  text-shadow: 0 0 10px currentColor !important;
+}
