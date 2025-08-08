@@ -18,134 +18,9 @@ export interface UserTheme {
 
 // Define theme CSS content directly in JavaScript
 const themeDefinitions = {
-  light: `
-    :root {
-      --color-primary: #007bff !important;
-      --color-background-primary: #ffffff !important;
-      --color-background-secondary: #f8f9fa !important;
-      --color-text-primary: #212529 !important;
-      --color-border: #dee2e6 !important;
-      --color-success: #28a745 !important;
-      --color-danger: #dc3545 !important;
-      --color-text-secondary: #6c757d !important;
-    }
-  `,
-  dark: `
-    :root {
-      --color-primary: #0d6efd !important;
-      --color-background-primary: #212529 !important;
-      --color-background-secondary: #343a40 !important;
-      --color-text-primary: #f8f9fa !important;
-      --color-border: #495057 !important;
-      --color-success: #198754 !important;
-      --color-danger: #dc3545 !important;
-      --color-text-secondary: #adb5bd !important;
-    }
-  `,
-  rainbow: `
-    :root {
-      --color-primary: #ff6b6b !important;
-      --color-background-primary: #2d3436 !important;
-      --color-background-secondary: #636e72 !important;
-      --color-text-primary: #ddd !important;
-      --color-border: #74b9ff !important;
-      --color-success: #00b894 !important;
-      --color-danger: #e84393 !important;
-      --color-text-secondary: #b2bec3 !important;
-    }
-    button {
-      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1) !important;
-      background-size: 200% 200% !important;
-      animation: rainbow-gradient 3s ease infinite !important;
-    }
-    @keyframes rainbow-gradient {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .tag-btn.selected, .tag-chip, .tag-badge, .tag-item {
-      background: linear-gradient(45deg, #ff6b6b, #4ecdc4) !important;
-      animation: rainbow-gradient 3s ease infinite !important;
-    }
-  `,
-  solarized: `
-    :root {
-      --color-primary: #268bd2 !important;
-      --color-background-primary: #002b36 !important;
-      --color-background-secondary: #073642 !important;
-      --color-text-primary: #839496 !important;
-      --color-border: #586e75 !important;
-      --color-success: #859900 !important;
-      --color-danger: #dc322f !important;
-      --color-text-secondary: #586e75 !important;
-    }
-    .markdown-preview h1, .markdown-content h1 { color: #b58900 !important; }
-    .markdown-preview h2, .markdown-content h2 { color: #cb4b16 !important; }
-    .markdown-preview h3, .markdown-content h3 { color: #dc322f !important; }
-    .markdown-preview code, .markdown-content code {
-      background-color: #073642 !important;
-      color: #2aa198 !important;
-    }
-    .markdown-preview blockquote, .markdown-content blockquote {
-      border-left-color: #859900 !important;
-      color: #586e75 !important;
-    }
-  `,
-  monokai: `
-    :root {
-      --color-primary: #a6e22e !important;
-      --color-background-primary: #272822 !important;
-      --color-background-secondary: #3e3d32 !important;
-      --color-text-primary: #f8f8f2 !important;
-      --color-border: #49483e !important;
-      --color-success: #a6e22e !important;
-      --color-danger: #f92672 !important;
-      --color-text-secondary: #75715e !important;
-    }
-    .markdown-preview h1, .markdown-content h1 { color: #f92672 !important; }
-    .markdown-preview h2, .markdown-content h2 { color: #fd971f !important; }
-    .markdown-preview h3, .markdown-content h3 { color: #e6db74 !important; }
-    .markdown-preview code, .markdown-content code {
-      background-color: #3e3d32 !important;
-      color: #66d9ef !important;
-    }
-    .markdown-preview pre, .markdown-content pre {
-      background-color: #3e3d32 !important;
-      border: 1px solid #49483e !important;
-    }
-    .markdown-preview blockquote, .markdown-content blockquote {
-      border-left-color: #a6e22e !important;
-      color: #75715e !important;
-    }
-  `
 };
 
 export const availableThemes: Theme[] = [
-  {
-    name: 'light',
-    displayName: 'Light',
-    cssFile: ''
-  },
-  {
-    name: 'dark',
-    displayName: 'Dark',
-    cssFile: ''
-  },
-  {
-    name: 'rainbow',
-    displayName: 'Rainbow',
-    cssFile: ''
-  },
-  {
-    name: 'solarized',
-    displayName: 'Solarized',
-    cssFile: ''
-  },
-  {
-    name: 'monokai',
-    displayName: 'Monokai',
-    cssFile: ''
-  }
 ];
 
 class ThemeManager {
@@ -153,16 +28,57 @@ class ThemeManager {
   private themeElement: HTMLStyleElement | null = null;
   private userThemes: UserTheme[] = [];
   private allThemes: Theme[] = [...availableThemes];
+  private isInitialized: boolean = false;
 
   constructor() {
-    this.loadSavedTheme();
-    this.createThemeElement();
+    this.initializeAsync();
+  }
+
+  private async initializeAsync() {
+    try {
+      await this.initializeDefaultThemes();
+      await this.loadAllThemes();
+      this.loadSavedTheme();
+      this.createThemeElement();
+      this.isInitialized = true;
+      
+      // Notify that themes are ready
+      window.dispatchEvent(new CustomEvent('themes-ready'));
+    } catch (error) {
+      console.error('Failed to initialize theme manager:', error);
+      // Fall back to basic initialization
+      this.createThemeElement();
+      this.isInitialized = true;
+    }
   }
 
   private loadSavedTheme() {
     const saved = localStorage.getItem('lychee-theme');
-    if (saved && availableThemes.find(t => t.name === saved)) {
-      this.currentTheme = saved;
+    if (saved) {
+      // Check if theme exists in either built-in or user themes
+      const theme = this.allThemes.find(t => t.name === saved);
+      if (theme) {
+        this.currentTheme = saved;
+        return;
+      }
+      // If saved theme not found, fall through to choose a sensible default
+    }
+
+    // No saved theme, or saved theme not found: choose a sensible default
+    // Prefer a built-in light theme if available, else prefer a default user dark theme, else first available
+    const preferredNamesInOrder = ['light', 'user-dark', 'dark'];
+    const preferred = preferredNamesInOrder
+      .map(name => this.allThemes.find(t => t.name === name))
+      .find(Boolean) as Theme | undefined;
+
+    if (preferred) {
+      this.currentTheme = preferred.name;
+      return;
+    }
+
+    // Fallback to the first available theme if any
+    if (this.allThemes.length > 0) {
+      this.currentTheme = this.allThemes[0].name;
     }
   }
 
@@ -176,6 +92,8 @@ class ThemeManager {
     this.themeElement = document.createElement('style');
     this.themeElement.id = 'theme-stylesheet';
     document.head.appendChild(this.themeElement);
+    
+    // Apply the current theme
     this.applyTheme(this.currentTheme);
   }
 
@@ -202,29 +120,30 @@ class ThemeManager {
   }
 
   async applyTheme(themeName: string) {
-    // Check if it's a user theme
-    const userTheme = this.allThemes.find(t => t.name === themeName && t.isUserTheme);
-    if (userTheme && userTheme.content) {
-      // Apply user theme content
-      if (this.themeElement) {
-        this.themeElement.textContent = userTheme.content;
-        this.currentTheme = themeName;
-        localStorage.setItem('lychee-theme', themeName);
-        
-        // Dispatch theme change event
-        window.dispatchEvent(new CustomEvent('theme-changed', { 
-          detail: { theme: themeName } 
-        }));
-        
+    // Ensure style element exists
+    if (!this.themeElement) {
+      this.createThemeElement();
+    }
 
-        return;
-      }
+    // Check if it's a user theme (user themes names are saved as-is, e.g., "user-dark")
+    const userTheme = this.allThemes.find(t => t.name === themeName && t.isUserTheme);
+    if (userTheme && userTheme.content && this.themeElement) {
+      // Apply user theme content
+      this.themeElement.textContent = userTheme.content;
+      this.currentTheme = themeName;
+      localStorage.setItem('lychee-theme', themeName);
+
+      // Dispatch theme change event
+      window.dispatchEvent(new CustomEvent('theme-changed', { 
+        detail: { theme: themeName } 
+      }));
+      return;
     }
 
     // Fall back to built-in theme logic
     const theme = availableThemes.find(t => t.name === themeName);
-    if (!theme || !this.themeElement) {
-      console.error(`Theme not found or element missing: ${themeName}`);
+    if (!theme) {
+      console.warn(`Theme not found: ${themeName}. Falling back to first available or noop.`);
       return;
     }
 
@@ -238,7 +157,12 @@ class ThemeManager {
 
 
     // Apply the CSS
-    this.themeElement.textContent = css;
+    if (!this.themeElement) {
+      this.createThemeElement();
+    }
+    if (this.themeElement) {
+      this.themeElement.textContent = css;
+    }
     
     // Force a reflow to ensure CSS is applied immediately
     document.documentElement.offsetHeight;
@@ -260,6 +184,24 @@ class ThemeManager {
     await this.loadAllThemes();
     // Re-populate theme selector
     window.dispatchEvent(new CustomEvent('themes-refreshed'));
+  }
+
+  private async initializeDefaultThemes() {
+    try {
+      await invoke('initialize_default_themes');
+    } catch (error) {
+      console.error('Failed to initialize default themes:', error);
+    }
+  }
+
+  async ensureDefaultThemes(): Promise<void> {
+    try {
+      await invoke('initialize_default_themes');
+      await this.refreshUserThemes();
+    } catch (error) {
+      console.error('Failed to ensure default themes:', error);
+      throw error;
+    }
   }
 
   async openThemesDirectory(): Promise<string> {
@@ -299,6 +241,24 @@ class ThemeManager {
 
   getAvailableThemes(): Theme[] {
     return this.allThemes;
+  }
+
+  isReady(): boolean {
+    return this.isInitialized;
+  }
+
+  async waitForReady(): Promise<void> {
+    if (this.isInitialized) {
+      return Promise.resolve();
+    }
+    
+    return new Promise((resolve) => {
+      const handler = () => {
+        window.removeEventListener('themes-ready', handler);
+        resolve();
+      };
+      window.addEventListener('themes-ready', handler);
+    });
   }
 }
 

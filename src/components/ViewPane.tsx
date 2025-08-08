@@ -1,9 +1,10 @@
 // src/components/ViewPane.tsx
 
-import { createSignal, Show, For, createEffect, createMemo } from "solid-js";
+import { createSignal, Show, For, createEffect, createMemo, onMount, onCleanup } from "solid-js";
 import { invoke } from "@tauri-apps/api/core";
 import { parseMarkdown, extractPlainText } from "../lib/markdown";
 import { parseAndFormatTags } from "../lib/tagFormatter";
+import { keyBindingManager } from "../lib/keybindings";
 import { Icon } from "./Icon";
 import type { NoteWithTags, UpdateNoteRequest } from "../types";
 
@@ -24,6 +25,54 @@ export function ViewPane(props: ViewPaneProps) {
   const [editTagList, setEditTagList] = createSignal<string[]>([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = createSignal(false);
   const [showCancelConfirm, setShowCancelConfirm] = createSignal(false);
+  
+  // Undo/Redo system
+  const [undoStack, setUndoStack] = createSignal<string[]>([]);
+  const [redoStack, setRedoStack] = createSignal<string[]>([]);
+  let undoTimer: NodeJS.Timeout | null = null;
+
+  // Undo/Redo functions
+  const pushToUndoStack = (content: string) => {
+    setUndoStack(prev => [...prev, content]);
+    setRedoStack([]); // Clear redo stack when new change is made
+  };
+
+  const undo = () => {
+    const currentContent = editContent();
+    const stack = undoStack();
+    
+    if (stack.length > 0) {
+      const previousContent = stack[stack.length - 1];
+      setUndoStack(prev => prev.slice(0, -1));
+      setRedoStack(prev => [...prev, currentContent]);
+      setEditContent(previousContent);
+    }
+  };
+
+  const redo = () => {
+    const stack = redoStack();
+    
+    if (stack.length > 0) {
+      const nextContent = stack[stack.length - 1];
+      setRedoStack(prev => prev.slice(0, -1));
+      pushToUndoStack(editContent());
+      setEditContent(nextContent);
+    }
+  };
+
+  const handleContentChange = (newContent: string) => {
+    // Clear existing timer
+    if (undoTimer) {
+      clearTimeout(undoTimer);
+    }
+
+    // Set new timer to push to undo stack after 1 second of no typing
+    undoTimer = setTimeout(() => {
+      pushToUndoStack(editContent());
+    }, 1000);
+
+    setEditContent(newContent);
+  };
 
   // Auto-populate edit content when entering edit mode
   createEffect(() => {
@@ -35,10 +84,42 @@ export function ViewPane(props: ViewPaneProps) {
     if (viewMode === 'edit' && selectedId) {
       const note = notes.find(n => n.id === selectedId);
       if (note) {
-              setEditContent(note.content);
-      setEditTagList(note.tags);
+        setEditContent(note.content);
+        setEditTagList(note.tags);
         setTagInput('');
+        // Initialize undo stack with original content
+        setUndoStack([note.content]);
+        setRedoStack([]);
       }
+    }
+  });
+
+  // Set up keybinding handlers for undo/redo
+  onMount(() => {
+    const handleUndo = () => {
+      if (props.viewMode === 'edit') {
+        undo();
+      }
+    };
+
+    const handleRedo = () => {
+      if (props.viewMode === 'edit') {
+        redo();
+      }
+    };
+
+    keyBindingManager.on('UNDO', handleUndo);
+    keyBindingManager.on('REDO', handleRedo);
+
+    return () => {
+      keyBindingManager.off('UNDO', handleUndo);
+      keyBindingManager.off('REDO', handleRedo);
+    };
+  });
+
+  onCleanup(() => {
+    if (undoTimer) {
+      clearTimeout(undoTimer);
     }
   });
 
@@ -344,7 +425,7 @@ export function ViewPane(props: ViewPaneProps) {
             <textarea
               class="content-textarea"
               value={editContent()}
-              onInput={(e) => setEditContent(e.target.value)}
+              onInput={(e) => handleContentChange(e.target.value)}
               placeholder="Write your note here..."
             />
             

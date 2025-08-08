@@ -13,6 +13,7 @@ interface HeaderProps {
   selectedTags: string[];
   onSelectedTagsChange: (tags: string[]) => void;
   onNewNoteEdit: (noteId: number) => void;
+  onOpenSettings?: () => void;
 }
 
 export function Header(props: HeaderProps) {

@@ -16,9 +16,8 @@ This application was inspired by my messy notes. I have a scratch notebook where
 
 **Front-End** ⤵
 - Vite
-- React
+- Solid.js
 - TypeScript
-- shadcn/ui
 
 **Back-End** ⤵
 - Tauri

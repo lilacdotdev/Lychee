@@ -186,6 +186,87 @@ pub async fn open_themes_directory(app: AppHandle) -> Result<(), String> {
     Ok(())
 }
 
+/// Initialize default themes in the themes directory
+#[command]
+pub async fn initialize_default_themes(app: AppHandle) -> Result<(), String> {
+    let app_data_dir = app
+        .path()
+        .app_data_dir()
+        .map_err(|e| format!("Failed to get app data directory: {}", e))?;
+    
+    let themes_dir = app_data_dir.join("themes");
+    
+    // Create themes directory if it doesn't exist
+    if !themes_dir.exists() {
+        std::fs::create_dir_all(&themes_dir)
+            .map_err(|e| format!("Failed to create themes directory: {}", e))?;
+    }
+    
+    // Define the default dark theme CSS
+    let dark_theme_css = r#":root {
+  --color-primary: #0d6efd !important;
+  --color-background-primary: #212529 !important;
+  --color-background-secondary: #343a40 !important;
+  --color-text-primary: #f8f9fa !important;
+  --color-text-secondary: #adb5bd !important;
+  --color-border: #495057 !important;
+  --color-success: #198754 !important;
+  --color-danger: #dc3545 !important;
+}
+
+/* Additional dark theme styling */
+.app-container {
+  background-color: var(--color-background-primary) !important;
+}
+
+.note-card {
+  background-color: var(--color-background-secondary) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.note-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+.sidebar {
+  background-color: var(--color-background-secondary) !important;
+  border-right: 1px solid var(--color-border) !important;
+}
+
+button {
+  background-color: var(--color-primary) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+button:hover {
+  background-color: #0b5ed7 !important;
+}
+
+input, textarea {
+  background-color: var(--color-background-secondary) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25) !important;
+}"#;
+    
+    // Create dark.css theme file
+    let dark_theme_file = themes_dir.join("dark.css");
+    
+    // Only create the file if it doesn't already exist
+    if !dark_theme_file.exists() {
+        std::fs::write(&dark_theme_file, dark_theme_css)
+            .map_err(|e| format!("Failed to write dark theme file: {}", e))?;
+    }
+    
+    Ok(())
+}
+
 // Helper functions
 
 fn capitalize_words(s: &str) -> String {

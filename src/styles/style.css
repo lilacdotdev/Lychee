@@ -1,5 +1,15 @@
   /* src/styles/style.css */
 
+/* Fallback theme variables to ensure UI is visible even before a theme is applied */
+:root {
+  --color-primary: #0d6efd;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f5f6f8;
+  --color-text-primary: #111111;
+  --color-text-secondary: #6b7280;
+  --color-border: #e5e7eb;
+}
+
 /* Icon styles */
 .icon {
   color: var(--color-text-primary);
@@ -1019,4 +1029,453 @@ body {
 .markdown-content th {
   background-color: var(--color-background-secondary);
   font-weight: 600;
+}
+
+/* Spotlight Search Styles */
+.spotlight-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 15vh;
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.spotlight-container {
+  background-color: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  min-width: 600px;
+  max-width: 700px;
+  max-height: 70vh;
+  overflow: hidden;
+  animation: spotlightSlideIn 0.3s ease-out;
+}
+
+@keyframes spotlightSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.spotlight-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.spotlight-input-container {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.spotlight-search-icon {
+  color: var(--color-text-secondary);
+  margin-right: 0.75rem;
+}
+
+.spotlight-prefix {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+}
+
+.spotlight-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: none;
+  color: var(--color-text-primary);
+  font-size: 1.1rem;
+  padding: 0.5rem 0;
+}
+
+.spotlight-input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.spotlight-loading {
+  margin-left: 0.5rem;
+}
+
+.spotlight-close {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  margin-left: 1rem;
+}
+
+.spotlight-close:hover {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+}
+
+.spotlight-suggestions {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.spotlight-suggestion {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  gap: 0.75rem;
+}
+
+.spotlight-suggestion:hover,
+.spotlight-suggestion.selected {
+  background-color: var(--color-background-secondary);
+}
+
+.spotlight-suggestion.selected {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.spotlight-suggestion .icon {
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.spotlight-suggestion.selected .icon {
+  color: white;
+}
+
+.suggestion-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.suggestion-title {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.suggestion-preview {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spotlight-suggestion.selected .suggestion-preview {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.suggestion-tags {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.suggestion-tag {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 8px;
+}
+
+.spotlight-suggestion.selected .suggestion-tag {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.suggestion-text {
+  flex: 1;
+}
+
+.suggestion-type {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  margin-left: auto;
+}
+
+.spotlight-suggestion.selected .suggestion-type {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.spotlight-no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.spotlight-no-results .icon {
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+}
+
+.spotlight-no-results p {
+  margin: 0.5rem 0;
+}
+
+.spotlight-hint {
+  font-size: 0.9rem;
+  color: var(--color-primary);
+}
+
+.spotlight-footer {
+  border-top: 1px solid var(--color-border);
+  padding: 0.75rem 1rem;
+  background-color: var(--color-background-secondary);
+}
+
+.spotlight-shortcuts {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.spotlight-shortcuts kbd {
+  background-color: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0.1rem 0.3rem;
+  font-family: inherit;
+  font-size: 0.7rem;
+  margin-right: 0.25rem;
+}
+
+/* Modal Dialog Styles */
+.modal-container {
+  background-color: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  min-width: 500px;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-background-secondary);
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 1.5rem;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+}
+
+.modal-content {
+  padding: 2rem;
+  overflow-y: auto;
+  max-height: 60vh;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-background-secondary);
+}
+
+/* Settings Modal Specific */
+.settings-placeholder,
+.plugin-placeholder,
+.export-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.settings-placeholder .icon,
+.plugin-placeholder .icon,
+.export-placeholder .icon {
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.settings-placeholder h3,
+.plugin-placeholder h3,
+.export-placeholder h3 {
+  margin: 0 0 1rem 0;
+  color: var(--color-text-primary);
+  font-size: 1.5rem;
+}
+
+.settings-placeholder p,
+.plugin-placeholder p,
+.export-placeholder p {
+  margin: 0.5rem 0;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* Export Modal Specific */
+.export-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.export-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.export-option:hover {
+  background-color: var(--color-background-secondary);
+  border-color: var(--color-primary);
+}
+
+.export-option .icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.export-option h4 {
+  margin: 0 0 0.25rem 0;
+  color: var(--color-text-primary);
+  font-size: 1rem;
+}
+
+.export-option p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Button Styles */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #0b5ed7;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-background-primary);
+  border-color: var(--color-primary);
+}
+
+/* Animation for spinning loader */
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Theme dropdown overlay */
+.theme-dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
 }

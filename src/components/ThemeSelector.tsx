@@ -11,6 +11,8 @@ export function ThemeSelector() {
 
   // Load themes on mount
   onMount(async () => {
+    // Wait for theme manager to be ready
+    await themeManager.waitForReady();
     const themes = await themeManager.loadAllThemes();
     setAllThemes(themes);
     setCurrentTheme(themeManager.getCurrentTheme());
@@ -27,12 +29,20 @@ export function ThemeSelector() {
       setAllThemes(themes);
     };
 
+    const handleThemesReady = async () => {
+      const themes = await themeManager.loadAllThemes();
+      setAllThemes(themes);
+      setCurrentTheme(themeManager.getCurrentTheme());
+    };
+
     window.addEventListener('theme-changed', handleThemeChange as EventListener);
     window.addEventListener('themes-refreshed', handleThemesRefresh as EventListener);
+    window.addEventListener('themes-ready', handleThemesReady as EventListener);
     
     return () => {
       window.removeEventListener('theme-changed', handleThemeChange as EventListener);
       window.removeEventListener('themes-refreshed', handleThemesRefresh as EventListener);
+      window.removeEventListener('themes-ready', handleThemesReady as EventListener);
     };
   });
 

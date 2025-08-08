@@ -10,6 +10,8 @@ interface SidebarProps {
   selectedTags: string[];
   onSelectedTagsChange: (tags: string[]) => void;
   notes: any[]; // Add notes to trigger refresh
+  onOpenSettings: () => void;
+  onOpenPlugins: () => void;
 }
 
 export function Sidebar(props: SidebarProps) {
@@ -62,11 +64,11 @@ export function Sidebar(props: SidebarProps) {
   };
 
   const handlePluginsClick = () => {
-    // Plugins functionality to be implemented
+    props.onOpenPlugins();
   };
 
   const handleSettingsClick = () => {
-    // Settings functionality to be implemented
+    props.onOpenSettings();
   };
 
   return (
