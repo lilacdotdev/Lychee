@@ -1473,6 +1473,51 @@ body {
   gap: 0.5rem;
 }
 
+/* Plugins UI */
+.plugins-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.plugin-card {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  background: var(--color-background-primary);
+}
+
+.plugin-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.plugin-title {
+  font-weight: 600;
+}
+
+.plugin-version {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.plugin-desc {
+  margin-top: 0.5rem;
+}
+
+.plugin-meta {
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.plugin-actions-row {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;

@@ -78,7 +78,11 @@ fn main() {
             api::themes::check_themes_directory,
             api::themes::open_themes_directory,
             api::themes::initialize_default_themes,
-            api::export::save_export_pdf
+            api::export::save_export_pdf,
+            api::plugins::get_plugins_directory,
+            api::plugins::open_plugins_directory,
+            api::plugins::list_plugins,
+            api::plugins::set_plugin_enabled
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
