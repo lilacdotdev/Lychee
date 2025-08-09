@@ -108,9 +108,6 @@ export function ThemeSelector() {
                 >
                   <div class="theme-preview" data-theme={theme.name}></div>
                   <span class="theme-label">{theme.displayName}</span>
-                  <Show when={theme.isUserTheme}>
-                    <span class="user-badge">Custom</span>
-                  </Show>
                 </button>
               )}
             </For>

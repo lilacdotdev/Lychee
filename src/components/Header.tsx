@@ -14,6 +14,7 @@ interface HeaderProps {
   onSelectedTagsChange: (tags: string[]) => void;
   onNewNoteEdit: (noteId: number) => void;
   onOpenSettings?: () => void;
+  onOpenExport?: () => void;
 }
 
 export function Header(props: HeaderProps) {
@@ -63,7 +64,7 @@ export function Header(props: HeaderProps) {
   };
 
   const handleExport = () => {
-    // Export functionality to be implemented
+    if (props.onOpenExport) props.onOpenExport();
     setShowLogoMenu(false);
   };
 

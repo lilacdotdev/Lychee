@@ -35,19 +35,26 @@ export type KeyBindingAction =
   | 'OPEN_TAG_SEARCH';
 
 class KeyBindingManager {
-  private bindings: Map<string, KeyBinding> = new Map();
+  private bindings: Map<string, KeyBinding> = new Map(); // keyCombo -> binding
+  private actionToBinding: Map<KeyBindingAction, KeyBinding> = new Map();
   private listeners: Map<KeyBindingAction, ((event?: KeyboardEvent) => void)[]> = new Map();
   private isEnabled = true;
+  private readonly storageKey = 'lychee-keybindings';
+  private defaultByAction: Map<KeyBindingAction, KeyBinding> = new Map();
 
   constructor() {
     this.loadDefaultBindings();
+    this.loadOverridesFromStorage();
     this.setupGlobalListener();
   }
 
   private loadDefaultBindings() {
     defaultKeybindings.forEach(binding => {
       const key = this.getBindingKey(binding);
-      this.bindings.set(key, binding);
+      const b = { ...binding };
+      this.bindings.set(key, b);
+      this.actionToBinding.set(binding.action as KeyBindingAction, b);
+      this.defaultByAction.set(binding.action as KeyBindingAction, { ...b });
     });
   }
 
@@ -57,6 +64,52 @@ class KeyBindingManager {
     if (binding.shift) modifiers.push('shift');
     if (binding.alt) modifiers.push('alt');
     return `${modifiers.join('+')}-${binding.key}`;
+  }
+
+  private loadOverridesFromStorage() {
+    try {
+      const raw = localStorage.getItem(this.storageKey);
+      if (!raw) return;
+      const overrides: Record<string, Partial<KeyBinding>> = JSON.parse(raw);
+      Object.entries(overrides).forEach(([action, ov]) => {
+        const act = action as KeyBindingAction;
+        const current = this.actionToBinding.get(act);
+        if (!current) return;
+        const updated: KeyBinding = {
+          ...current,
+          key: ov.key ?? current.key,
+          ctrl: ov.ctrl ?? current.ctrl,
+          shift: ov.shift ?? current.shift,
+          alt: ov.alt ?? current.alt,
+        };
+        this.applyBinding(act, updated);
+      });
+    } catch (_) {
+      // ignore
+    }
+  }
+
+  private saveOverridesToStorage() {
+    const overrides: Record<string, Partial<KeyBinding>> = {};
+    this.actionToBinding.forEach((b, action) => {
+      const def = this.defaultByAction.get(action);
+      if (!def) return;
+      // store only differences from default
+      if (
+        b.key !== def.key ||
+        !!b.ctrl !== !!def.ctrl ||
+        !!b.shift !== !!def.shift ||
+        !!b.alt !== !!def.alt
+      ) {
+        overrides[action] = {
+          key: b.key,
+          ctrl: b.ctrl,
+          shift: b.shift,
+          alt: b.alt,
+        };
+      }
+    });
+    localStorage.setItem(this.storageKey, JSON.stringify(overrides));
   }
 
   private setupGlobalListener() {
@@ -97,6 +150,19 @@ class KeyBindingManager {
     });
   }
 
+  private applyBinding(action: KeyBindingAction, binding: KeyBinding) {
+    // remove old entry for this action
+    const existing = this.actionToBinding.get(action);
+    if (existing) {
+      const oldKey = this.getBindingKey(existing);
+      this.bindings.delete(oldKey);
+    }
+    // insert new
+    const key = this.getBindingKey(binding);
+    this.bindings.set(key, binding);
+    this.actionToBinding.set(action, binding);
+  }
+
   private executeAction(action: KeyBindingAction, event: KeyboardEvent) {
     const actionListeners = this.listeners.get(action) || [];
     actionListeners.forEach(listener => {
@@ -130,7 +196,8 @@ class KeyBindingManager {
   }
 
   public getBindings(): KeyBinding[] {
-    return Array.from(this.bindings.values());
+    // Return one per action in a stable order of defaults
+    return Array.from(this.actionToBinding.values());
   }
 
   public getBindingDescription(action: KeyBindingAction): string {
@@ -139,7 +206,7 @@ class KeyBindingManager {
   }
 
   public getBindingKeys(action: KeyBindingAction): string {
-    const binding = Array.from(this.bindings.values()).find(b => b.action === action);
+    const binding = this.actionToBinding.get(action);
     if (!binding) return '';
     
     const modifiers = [];
@@ -148,6 +215,40 @@ class KeyBindingManager {
     if (binding.alt) modifiers.push('Alt');
     
     return modifiers.length > 0 ? `${modifiers.join('+')}+${binding.key.toUpperCase()}` : binding.key.toUpperCase();
+  }
+
+  public getBindingByAction(action: KeyBindingAction): KeyBinding | undefined {
+    return this.actionToBinding.get(action);
+  }
+
+  public hasConflict(test: KeyBinding, exceptAction?: KeyBindingAction): boolean {
+    const key = this.getBindingKey(test);
+    const existing = this.bindings.get(key);
+    return !!existing && existing.action !== exceptAction;
+  }
+
+  public setBinding(action: KeyBindingAction, update: { key: string; ctrl?: boolean; shift?: boolean; alt?: boolean; }): boolean {
+    const current = this.actionToBinding.get(action);
+    if (!current) return false;
+    const next: KeyBinding = { ...current, key: update.key.toLowerCase(), ctrl: !!update.ctrl, shift: !!update.shift, alt: !!update.alt };
+    if (this.hasConflict(next, action)) {
+      return false;
+    }
+    this.applyBinding(action, next);
+    this.saveOverridesToStorage();
+    return true;
+  }
+
+  public resetBinding(action: KeyBindingAction) {
+    const def = this.defaultByAction.get(action);
+    if (!def) return;
+    this.applyBinding(action, { ...def });
+    this.saveOverridesToStorage();
+  }
+
+  public resetAllBindings() {
+    this.defaultByAction.forEach((def, action) => this.applyBinding(action, { ...def }));
+    this.saveOverridesToStorage();
   }
 }
 

@@ -24,7 +24,7 @@ export const availableThemes: Theme[] = [
 ];
 
 class ThemeManager {
-  private currentTheme: string = 'light';
+  private currentTheme: string = 'dark';
   private themeElement: HTMLStyleElement | null = null;
   private userThemes: UserTheme[] = [];
   private allThemes: Theme[] = [...availableThemes];

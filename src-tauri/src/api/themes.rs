@@ -67,7 +67,7 @@ pub async fn get_user_themes(app: AppHandle) -> Result<Vec<UserTheme>, String> {
                 .unwrap_or("unknown")
                 .to_string();
             
-            let display_name = format!("{} (Custom)", capitalize_words(&name));
+            let display_name = capitalize_words(&name);
             
             let content = std::fs::read_to_string(&path)
                 .map_err(|e| format!("Failed to read theme file {}: {}", path.display(), e))?;
@@ -212,47 +212,6 @@ pub async fn initialize_default_themes(app: AppHandle) -> Result<(), String> {
   --color-border: #495057 !important;
   --color-success: #198754 !important;
   --color-danger: #dc3545 !important;
-}
-
-/* Additional dark theme styling */
-.app-container {
-  background-color: var(--color-background-primary) !important;
-}
-
-.note-card {
-  background-color: var(--color-background-secondary) !important;
-  border: 1px solid var(--color-border) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-}
-
-.note-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
-}
-
-.sidebar {
-  background-color: var(--color-background-secondary) !important;
-  border-right: 1px solid var(--color-border) !important;
-}
-
-button {
-  background-color: var(--color-primary) !important;
-  color: var(--color-text-primary) !important;
-  border: 1px solid var(--color-border) !important;
-}
-
-button:hover {
-  background-color: #0b5ed7 !important;
-}
-
-input, textarea {
-  background-color: var(--color-background-secondary) !important;
-  color: var(--color-text-primary) !important;
-  border: 1px solid var(--color-border) !important;
-}
-
-input:focus, textarea:focus {
-  border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25) !important;
 }"#;
     
     // Create dark.css theme file

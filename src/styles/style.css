@@ -1350,6 +1350,36 @@ body {
   padding: 3rem 2rem;
 }
 
+.settings-section {
+  margin-bottom: 2rem;
+}
+
+.keybinds-table {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.kb-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.kb-header {
+  font-weight: 600;
+  background: var(--color-background-secondary);
+}
+
+.kb-capture {
+  margin-bottom: 0.5rem;
+  color: var(--color-primary);
+}
+
 .settings-placeholder .icon,
 .plugin-placeholder .icon,
 .export-placeholder .icon {

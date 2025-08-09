@@ -145,6 +145,7 @@ function App() {
         onSelectedTagsChange={setSelectedTags}
         onNewNoteEdit={handleNewNoteEdit}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenExport={() => setIsExportOpen(true)}
       />
       
       <div class="app-main">
