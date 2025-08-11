@@ -1,4 +1,7 @@
-// src/App.tsx
+/**
+ * Main application component for Lychee note-taking app
+ * Handles global state management, keybinding setup, and component orchestration
+ */
 
 import { createSignal, createEffect, onMount, onCleanup, Show } from "solid-js";
 import { Header } from "./components/Header";
@@ -15,19 +18,23 @@ import type { NoteWithTags } from "./types";
 import "./styles/style.css";
 
 function App() {
+  // Core application state
   const [notes, setNotes] = createSignal<NoteWithTags[]>([]);
   const [selectedNoteId, setSelectedNoteId] = createSignal<number | null>(null);
   const [searchQuery, setSearchQuery] = createSignal('');
   const [selectedTags, setSelectedTags] = createSignal<string[]>([]);
   const [viewMode, setViewMode] = createSignal<'search' | 'note' | 'edit'>('search');
   
-  // Modal states
+  // Modal state management
   const [isSpotlightOpen, setIsSpotlightOpen] = createSignal(false);
   const [spotlightMode, setSpotlightMode] = createSignal<'text' | 'tag'>('text');
   const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);
   const [isPluginOpen, setIsPluginOpen] = createSignal(false);
   const [isExportOpen, setIsExportOpen] = createSignal(false);
 
+  /**
+   * Refreshes the notes list from the backend
+   */
   const refreshNotes = async () => {
     try {
       const allNotes = await invoke<NoteWithTags[]>("get_all_notes");
@@ -37,20 +44,32 @@ function App() {
     }
   };
 
+  /**
+   * Updates the notes state with new notes data
+   */
   const handleNotesChange = (newNotes: NoteWithTags[]) => {
     setNotes(newNotes);
   };
 
+  /**
+   * Sets a note for editing and switches to edit mode
+   */
   const handleNewNoteEdit = (noteId: number) => {
     setSelectedNoteId(noteId);
     setViewMode('edit');
   };
 
+  /**
+   * Handles search input from spotlight and switches to search view
+   */
   const handleSpotlightSearch = (query: string) => {
     setSearchQuery(query);
     setViewMode('search');
   };
 
+  /**
+   * Adds a tag to the current selection and switches to search view
+   */
   const handleTagAdd = (tag: string) => {
     const current = selectedTags();
     if (!current.includes(tag)) {
@@ -59,18 +78,19 @@ function App() {
     setViewMode('search');
   };
 
-  // Initialize theme manager and load notes
+  /**
+   * Initialize theme manager and load notes on app startup
+   */
   createEffect(() => {
-    // Ensure theme manager is initialized
     themeManager.applyTheme(themeManager.getCurrentTheme());
-    
-    // Load notes
     refreshNotes();
   });
 
-  // Set up keybinding handlers
+  /**
+   * Set up global keybinding handlers
+   */
   onMount(() => {
-    // Create note
+    // Note creation keybinding
     keyBindingManager.on('CREATE_NOTE', async () => {
       try {
         const request = {
@@ -86,45 +106,40 @@ function App() {
       }
     });
 
-    // Return to view mode
+    // Navigation keybindings
     keyBindingManager.on('RETURN_TO_VIEW', () => {
       if (viewMode() === 'edit') {
         setViewMode('note');
       }
     });
 
-    // Return to notes list
     keyBindingManager.on('RETURN_TO_NOTES', () => {
       setViewMode('search');
       setSelectedNoteId(null);
     });
 
-    // Open settings
+    // Modal opening keybindings
     keyBindingManager.on('OPEN_SETTINGS', () => {
       setIsSettingsOpen(true);
     });
 
-    // Open export
     keyBindingManager.on('OPEN_EXPORT', () => {
       setIsExportOpen(true);
     });
 
-    // Open theme dropdown
     keyBindingManager.on('OPEN_THEME_DROPDOWN', () => {
-      // Trigger theme selector dropdown
       const themeButton = document.querySelector('.theme-selector-button') as HTMLElement;
       if (themeButton) {
         themeButton.click();
       }
     });
 
-    // Open spotlight search
+    // Search keybindings
     keyBindingManager.on('OPEN_SPOTLIGHT_SEARCH', () => {
       setSpotlightMode('text');
       setIsSpotlightOpen(true);
     });
 
-    // Open tag search
     keyBindingManager.on('OPEN_TAG_SEARCH', () => {
       setSpotlightMode('tag');
       setIsSpotlightOpen(true);

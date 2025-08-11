@@ -1,5 +1,18 @@
-  /* src/styles/style.css */
+/**
+ * Lychee Application Styles
+ * 
+ * Organization:
+ * 1. CSS Variables & Theme Fallbacks
+ * 2. Base Styles & Icons
+ * 3. Layout Components (App, Header, Sidebar, ViewPane)
+ * 4. UI Components (Buttons, Modals, Forms)
+ * 5. Theme System
+ * 6. Search & Spotlight
+ * 7. Plugin & Export Systems
+ * 8. Responsive Design
+ */
 
+/* === 1. CSS VARIABLES & THEME FALLBACKS === */
 /* Fallback theme variables to ensure UI is visible even before a theme is applied */
 :root {
   --color-primary: #0d6efd;
@@ -10,6 +23,7 @@
   --color-border: #e5e7eb;
 }
 
+/* === 2. BASE STYLES & ICONS === */
 /* Icon styles */
 .icon {
   color: var(--color-text-primary);
@@ -226,6 +240,7 @@ body {
 }
 
 /* App Container */
+/* === 3. LAYOUT COMPONENTS === */
 .app-container {
   display: flex;
   flex-direction: column;

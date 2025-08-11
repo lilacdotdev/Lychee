@@ -1,4 +1,7 @@
-// src/lib/keybindings.ts
+/**
+ * Global keybinding management system for Lychee application
+ * Handles keyboard shortcuts, conflict detection, and persistent customization
+ */
 
 export interface KeyBinding {
   key: string;
@@ -48,6 +51,9 @@ class KeyBindingManager {
     this.setupGlobalListener();
   }
 
+  /**
+   * Load default keybinding configuration into memory
+   */
   private loadDefaultBindings() {
     defaultKeybindings.forEach(binding => {
       const key = this.getBindingKey(binding);
@@ -58,6 +64,9 @@ class KeyBindingManager {
     });
   }
 
+  /**
+   * Convert a KeyBinding to a string key for storage/lookup
+   */
   private getBindingKey(binding: KeyBinding): string {
     const modifiers = [];
     if (binding.ctrl) modifiers.push('ctrl');
@@ -66,6 +75,9 @@ class KeyBindingManager {
     return `${modifiers.join('+')}-${binding.key}`;
   }
 
+  /**
+   * Load user customizations from localStorage
+   */
   private loadOverridesFromStorage() {
     try {
       const raw = localStorage.getItem(this.storageKey);
@@ -85,7 +97,7 @@ class KeyBindingManager {
         this.applyBinding(act, updated);
       });
     } catch (_) {
-      // ignore
+      // Ignore parsing errors
     }
   }
 
@@ -112,6 +124,9 @@ class KeyBindingManager {
     localStorage.setItem(this.storageKey, JSON.stringify(overrides));
   }
 
+  /**
+   * Set up global keyboard event listener for keybinding detection
+   */
   private setupGlobalListener() {
     document.addEventListener('keydown', (event) => {
       if (!this.isEnabled) return;
@@ -145,7 +160,7 @@ class KeyBindingManager {
         event.preventDefault();
         event.stopPropagation();
         
-        this.executeAction(binding.action, event);
+        this.executeAction(binding.action as KeyBindingAction, event);
       }
     });
   }

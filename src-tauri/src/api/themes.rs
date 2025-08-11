@@ -1,4 +1,7 @@
-// src-tauri/src/api/themes.rs
+/**
+ * Theme management API for Lychee application
+ * Handles user theme creation, loading, and directory management
+ */
 
 use serde::{Deserialize, Serialize};
 use tauri::{command, AppHandle, Manager};

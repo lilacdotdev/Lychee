@@ -1,4 +1,7 @@
-// src/components/Header.tsx
+/**
+ * Application header component
+ * Contains logo menu, search functionality, and tag management
+ */
 
 import { createSignal, createResource, For, Show } from "solid-js";
 import { invoke } from "@tauri-apps/api/core";

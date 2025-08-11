@@ -1,4 +1,8 @@
-// src/lib/theme.ts
+/**
+ * Theme management system for Lychee application
+ * Handles loading, applying, and persisting user themes
+ */
+
 import { invoke } from '@tauri-apps/api/core';
 
 export interface Theme {
@@ -16,12 +20,10 @@ export interface UserTheme {
   file_path: string;
 }
 
-// Define theme CSS content directly in JavaScript
-const themeDefinitions = {
-};
+// Built-in theme definitions (currently empty - all themes are user-defined)
+const themeDefinitions = {};
 
-export const availableThemes: Theme[] = [
-];
+export const availableThemes: Theme[] = [];
 
 class ThemeManager {
   private currentTheme: string = 'dark';
