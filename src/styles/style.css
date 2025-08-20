@@ -357,6 +357,11 @@ body {
   transition: border-color 0.2s ease;
 }
 
+.search-input::placeholder {
+  color: var(--color-text-primary);
+  opacity: 0.6;
+}
+
 .search-input:focus {
   outline: none;
   border-color: var(--color-primary);
