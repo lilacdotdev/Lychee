@@ -11,6 +11,7 @@ import { SpotlightSearch } from "./components/SpotlightSearch";
 import { SettingsModal } from "./components/SettingsModal";
 import { PluginModal } from "./components/PluginModal";
 import { ExportModal } from "./components/ExportModal";
+import { ThemeModal } from "./components/ThemeModal";
 import { themeManager } from "./lib/theme";
 import { keyBindingManager } from "./lib/keybindings";
 import { invoke } from "@tauri-apps/api/core";
@@ -31,6 +32,7 @@ function App() {
   const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);
   const [isPluginOpen, setIsPluginOpen] = createSignal(false);
   const [isExportOpen, setIsExportOpen] = createSignal(false);
+  const [isThemeOpen, setIsThemeOpen] = createSignal(false);
 
   /**
    * Refreshes the notes list from the backend
@@ -128,10 +130,7 @@ function App() {
     });
 
     keyBindingManager.on('OPEN_THEME_DROPDOWN', () => {
-      const themeButton = document.querySelector('.theme-selector-button') as HTMLElement;
-      if (themeButton) {
-        themeButton.click();
-      }
+      setIsThemeOpen(true);
     });
 
     // Search keybindings
@@ -170,6 +169,7 @@ function App() {
           notes={notes()}
           onOpenSettings={() => setIsSettingsOpen(true)}
           onOpenPlugins={() => setIsPluginOpen(true)}
+          onOpenThemes={() => setIsThemeOpen(true)}
         />
         
         <ViewPane
@@ -214,6 +214,13 @@ function App() {
         <ExportModal
           isOpen={true}
           onClose={() => setIsExportOpen(false)}
+        />
+      </Show>
+
+      <Show when={isThemeOpen()}>
+        <ThemeModal
+          isOpen={true}
+          onClose={() => setIsThemeOpen(false)}
         />
       </Show>
     </div>

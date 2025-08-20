@@ -2,7 +2,6 @@
 
 import { createSignal, createResource, For, Show } from "solid-js";
 import { invoke } from "@tauri-apps/api/core";
-import { ThemeSelector } from "./ThemeSelector";
 import { Icon } from "./Icon";
 import type { Tag } from "../types";
 
@@ -12,6 +11,7 @@ interface SidebarProps {
   notes: any[]; // Add notes to trigger refresh
   onOpenSettings: () => void;
   onOpenPlugins: () => void;
+  onOpenThemes: () => void;
 }
 
 export function Sidebar(props: SidebarProps) {
@@ -71,6 +71,10 @@ export function Sidebar(props: SidebarProps) {
     props.onOpenSettings();
   };
 
+  const handleThemesClick = () => {
+    props.onOpenThemes();
+  };
+
   return (
     <aside class="sidebar">
       <div class="sidebar-content">
@@ -103,9 +107,13 @@ export function Sidebar(props: SidebarProps) {
           <Icon name="package" size={20} class="clickable" />
         </button>
         
-        <div class="theme-selector-wrapper">
-          <ThemeSelector />
-        </div>
+        <button 
+          class="sidebar-icon-btn" 
+          onClick={handleThemesClick}
+          title="Themes"
+        >
+          <Icon name="sun" size={20} class="clickable" />
+        </button>
         
         <button 
           class="sidebar-icon-btn" 

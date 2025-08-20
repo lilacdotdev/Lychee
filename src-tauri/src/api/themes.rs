@@ -204,26 +204,149 @@ pub async fn initialize_default_themes(app: AppHandle) -> Result<(), String> {
         std::fs::create_dir_all(&themes_dir)
             .map_err(|e| format!("Failed to create themes directory: {}", e))?;
     }
+
+    let vivid_color_css = r#":root {
+        --color-primary: #0801ff !important;
+        --color-background-primary: #111827 !important;
+        --color-background-secondary: #302f50 !important;
+        --color-text-primary: #ff00b5 !important;
+        --color-text-secondary: #ab00ff !important;
+        --color-border: #00fcff !important;
+        --color-success: #56ff00 !important;
+        --color-danger: #ff1100 !important;
+    }"#;
     
-    // Define the default dark theme CSS
-    let dark_theme_css = r#":root {
-  --color-primary: #0d6efd !important;
-  --color-background-primary: #212529 !important;
-  --color-background-secondary: #343a40 !important;
-  --color-text-primary: #f8f9fa !important;
-  --color-text-secondary: #adb5bd !important;
-  --color-border: #495057 !important;
-  --color-success: #198754 !important;
-  --color-danger: #dc3545 !important;
-}"#;
+    let purple_haze_css = r#":root {
+        --color-primary: #815ebf !important;
+        --color-background-primary: #271832 !important;
+        --color-background-secondary: #403354 !important;
+        --color-text-primary: #bfabcf !important;
+        --color-text-secondary: #7f6c8d !important;
+        --color-border: #250041 !important;
+        --color-success: #915abb !important;
+        --color-danger: #53109c !important;
+    }"#;
     
-    // Create dark.css theme file
-    let dark_theme_file = themes_dir.join("dark.css");
+    let seaside_picnic_css = r#":root {
+        --color-primary:rgb(122, 215, 147) !important;
+        --color-background-primary: #4e5c74 !important;
+        --color-background-secondary: #47716d !important;
+        --color-text-primary: #b0eeff !important;
+        --color-text-secondary: #b0ceff !important;
+        --color-border: #a598ca !important;
+        --color-success: #a5ffd4 !important;
+        --color-danger: #feffcb !important;
+    }"#;
     
-    // Only create the file if it doesn't already exist
-    if !dark_theme_file.exists() {
-        std::fs::write(&dark_theme_file, dark_theme_css)
-            .map_err(|e| format!("Failed to write dark theme file: {}", e))?;
+    let sunset_savannah_css = r#":root {
+        --color-primary: #f86e1b !important;
+        --color-background-primary: #754122 !important;
+        --color-background-secondary:rgb(52, 27, 27) !important;
+        --color-text-primary:rgb(235, 211, 151) !important;
+        --color-text-secondary: #e2a94f !important;
+        --color-border:rgb(190, 147, 82) !important;
+        --color-success: #98d667 !important;
+        --color-danger: #d64e27 !important;
+    }"#;
+    
+    let modern_camo_css = r#":root {
+        --color-primary:rgb(77, 88, 71) !important;
+        --color-background-primary:rgb(56, 51, 38) !important;
+        --color-background-secondary:rgb(91, 77, 41) !important;
+        --color-text-primary:rgb(184, 153, 120) !important;
+        --color-text-secondary: #74b086 !important;
+        --color-border: #b97825 !important;
+        --color-success: #1b391f !important;
+        --color-danger: #f7d300 !important;
+    }"#;
+    
+    let pastel_sunrise_css = r#":root {
+        --color-primary: #ff6a66 !important;
+        --color-background-primary:rgb(241, 131, 151) !important;
+        --color-background-secondary:rgb(245, 140, 79) !important;
+        --color-text-primary:rgb(255, 243, 187) !important;
+        --color-text-secondary: #ffc166 !important;
+        --color-border: #ff8e66 !important;
+        --color-success: #ffe766 !important;
+        --color-danger: #f33b36 !important;
+    }"#;
+    
+    let lychee_classic_css = r#":root {
+        --color-primary: #ff6766 !important;
+        --color-background-primary:rgb(254, 142, 111) !important;
+        --color-background-secondary:rgb(170, 80, 127) !important;
+        --color-text-primary: #ffd6c0 !important;
+        --color-text-secondary: #fdb28a !important;
+        --color-border:rgb(255, 185, 201) !important;
+        --color-success: #7ac57a !important;
+        --color-danger: #ff6766 !important;
+    }"#;
+    
+    let lychee_dark_css = r#":root {
+        --color-primary:rgb(138, 66, 138) !important;
+        --color-background-primary: #392b39ff !important;
+        --color-background-secondary: #573945ff !important;
+        --color-text-primary: #f5bef5ff !important;
+        --color-text-secondary: #e29ec7ff !important;
+        --color-border: #d66a85ff !important;
+        --color-success: #55cb81ff !important;
+        --color-danger: #a33263ff !important;
+    }"#;
+    
+    let cloudy_thoughts_css = r#":root {
+        --color-primary:rgb(74, 128, 254) !important;
+        --color-background-primary: #373174 !important;
+        --color-background-secondary: #8f75aa !important;
+        --color-text-primary: #e2f6ff !important;
+        --color-text-secondary: #cdd7ff !important;
+        --color-border:rgb(186, 195, 255) !important;
+        --color-success: #4f8dff !important;
+        --color-danger: #ffe0fc !important;
+    }"#;
+    
+    let blackberry_fizz_css = r#":root {
+        --color-primary:rgb(154, 89, 224) !important;
+        --color-background-primary: #331b4e !important;
+        --color-background-secondary: #2e4c5f !important;
+        --color-text-primary: #edccf8 !important;
+        --color-text-secondary: #cc90d4 !important;
+        --color-border: #8bd1ff !important;
+        --color-success: #a6e0ac !important;
+        --color-danger: #ffa3c3 !important;
+    }"#;
+    
+    let bleeding_heart_css = r#":root {
+        --color-primary: #d1185c !important;
+        --color-background-primary:rgb(139, 37, 51) !important;
+        --color-background-secondary:rgb(192, 70, 115) !important;
+        --color-text-primary: #ff98b4 !important;
+        --color-text-secondary: #f15a91 !important;
+        --color-border: #e43f3c !important;
+        --color-success: #ffa6b2 !important;
+        --color-danger: #d11c18 !important;
+    }"#;
+
+    // Create all additional theme files
+    let theme_files = vec![
+        ("vivid-night.css", vivid_color_css),
+        ("purple-haze.css", purple_haze_css),
+        ("seaside-picnic.css", seaside_picnic_css),
+        ("sunset-savannah.css", sunset_savannah_css),
+        ("modern-camo.css", modern_camo_css),
+        ("pastel-sunrise.css", pastel_sunrise_css),
+        ("lychee-classic.css", lychee_classic_css),
+        ("lychee-dark.css", lychee_dark_css),
+        ("cloudy-thoughts.css", cloudy_thoughts_css),
+        ("blackberry-fizz.css", blackberry_fizz_css),
+        ("bleeding-heart.css", bleeding_heart_css),
+    ];
+
+    for (filename, content) in theme_files {
+        let theme_file = themes_dir.join(filename);
+        if !theme_file.exists() {
+            std::fs::write(&theme_file, content)
+                .map_err(|e| format!("Failed to write {} theme file: {}", filename, e))?;
+        }
     }
     
     Ok(())
