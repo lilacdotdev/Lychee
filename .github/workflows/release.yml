@@ -22,7 +22,7 @@ jobs:
       - name: Node Setup
         uses: actions/setup-node@v4
         with:
-          node-version: 10
+          node-version: 18
 
       - name: Rust Setup
         uses: dtolnay/rust-toolchain@stable
